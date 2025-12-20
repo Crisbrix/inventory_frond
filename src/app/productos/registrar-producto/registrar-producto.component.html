@@ -1,0 +1,118 @@
+<div class="productos-container">
+  <div class="productos-header-inline">
+    <div class="header-title">
+      <h2>Registrar Nuevo Producto</h2>
+      <p>Completa el formulario para agregar un nuevo producto al inventario</p>
+    </div>
+  </div>
+
+  <div class="productos-content-inline">
+    <div class="form-card">
+      <form [formGroup]="productoForm" (ngSubmit)="onSubmit()" class="producto-form">
+        <div class="form-group">
+          <label for="nombre" class="form-label">
+            Nombre del Producto <span class="required">*</span>
+          </label>
+          <input
+            id="nombre"
+            type="text"
+            formControlName="nombre"
+            class="form-input"
+            placeholder="Ej: Producto ABC"
+            [class.error]="productoForm.get('nombre')?.invalid && productoForm.get('nombre')?.touched">
+          <span *ngIf="productoForm.get('nombre')?.invalid && productoForm.get('nombre')?.touched" class="error-message">
+            {{ getFieldError('nombre') }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="descripcion" class="form-label">Descripción</label>
+          <textarea
+            id="descripcion"
+            formControlName="descripcion"
+            class="form-textarea"
+            rows="4"
+            placeholder="Descripción detallada del producto..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="stock_actual" class="form-label">
+              Stock Actual <span class="required">*</span>
+            </label>
+            <input
+              id="stock_actual"
+              type="number"
+              formControlName="stock_actual"
+              class="form-input"
+              placeholder="0"
+              min="0"
+              [class.error]="productoForm.get('stock_actual')?.invalid && productoForm.get('stock_actual')?.touched">
+            <span *ngIf="productoForm.get('stock_actual')?.invalid && productoForm.get('stock_actual')?.touched" class="error-message">
+              {{ getFieldError('stock_actual') }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="stock_minimo" class="form-label">
+              Stock Mínimo <span class="required">*</span>
+            </label>
+            <input
+              id="stock_minimo"
+              type="number"
+              formControlName="stock_minimo"
+              class="form-input"
+              placeholder="0"
+              min="0"
+              [class.error]="productoForm.get('stock_minimo')?.invalid && productoForm.get('stock_minimo')?.touched">
+            <span *ngIf="productoForm.get('stock_minimo')?.invalid && productoForm.get('stock_minimo')?.touched" class="error-message">
+              {{ getFieldError('stock_minimo') }}
+            </span>
+          </div>
+        </div>
+
+        <div *ngIf="error" class="error-alert">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z" fill="currentColor"/>
+          </svg>
+          {{ error }}
+        </div>
+
+        <div *ngIf="success" class="success-alert">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" fill="currentColor"/>
+          </svg>
+          <div class="success-content">
+            <strong>Producto registrado exitosamente</strong>
+            <div *ngIf="productoRegistrado" class="success-details">
+              <span>Código asignado: <strong>{{ productoRegistrado.codigo }}</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button
+            type="button"
+            class="btn-cancel"
+            (click)="productoForm.reset()">
+            Limpiar
+          </button>
+          <button
+            type="submit"
+            class="btn-submit"
+            [disabled]="loading || productoForm.invalid">
+            <span *ngIf="!loading">Registrar Producto</span>
+            <span *ngIf="loading" class="loading-spinner">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" opacity="0.25"/>
+                <path d="M12 2C6.48 2 2 6.48 2 12" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/>
+              </svg>
+              Registrando...
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

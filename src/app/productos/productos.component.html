@@ -1,0 +1,123 @@
+<div class="productos-page">
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a routerLink="/dashboard" class="breadcrumb-item">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 20V14H14V20H19V12H22L12 3L2 12H5V20H10Z" fill="currentColor"/>
+      </svg>
+      Dashboard
+    </a>
+    <svg class="breadcrumb-separator" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="breadcrumb-item active">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 7H4C3.45 7 3 7.45 3 8V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V8C21 7.45 20.55 7 20 7ZM19 19H5V9H19V19Z" fill="currentColor"/>
+        <path d="M7 11H17V13H7V11ZM7 15H14V17H7V15Z" fill="currentColor"/>
+        <path d="M9 3L7.5 5.5H16.5L15 3H9Z" fill="currentColor"/>
+      </svg>
+      Productos
+    </div>
+  </div>
+
+  <!-- Header Card -->
+  <div class="header-card">
+    <div class="header-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 7H4C3.45 7 3 7.45 3 8V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V8C21 7.45 20.55 7 20 7ZM19 19H5V9H19V19Z" fill="white"/>
+        <path d="M7 11H17V13H7V11ZM7 15H14V17H7V15Z" fill="white"/>
+        <path d="M9 3L7.5 5.5H16.5L15 3H9Z" fill="white"/>
+      </svg>
+    </div>
+    <div class="header-content">
+      <div class="header-text">
+        <h1>Gestión de Productos</h1>
+        <div class="header-subtitle">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.1 13.34L9.48 14.72L11.88 12.32L9.48 9.92L8.1 11.3L9.74 12.94L8.1 13.34ZM14.48 13.34L15.86 12.94L17.5 11.3L16.12 9.92L13.72 12.32L16.12 14.72L14.48 13.34ZM21 15V17H3V15H21ZM3 19H21V21H3V19Z" fill="currentColor"/>
+            <path d="M3 7H21V9H3V7Z" fill="currentColor"/>
+          </svg>
+          <span>Administra tu inventario de productos</span>
+        </div>
+      </div>
+      <button class="btn-new-product" (click)="toggleFormulario()" *ngIf="!mostrarFormulario">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="white"/>
+        </svg>
+        Nuevo Producto
+      </button>
+      <button class="btn-cancel" (click)="toggleFormulario()" *ngIf="mostrarFormulario">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z" fill="currentColor"/>
+        </svg>
+        Cancelar
+      </button>
+    </div>
+  </div>
+
+  <div class="productos-content">
+    <!-- Formulario de registro (se muestra/oculta) -->
+    <div class="form-section" *ngIf="mostrarFormulario">
+      <app-registrar-producto (productoCreado)="onProductoCreado()"></app-registrar-producto>
+    </div>
+
+    <!-- Lista de productos -->
+    <div class="productos-list" *ngIf="!mostrarFormulario">
+      <div *ngIf="loading" class="loading-state">
+        <div class="spinner"></div>
+        <p>Cargando productos...</p>
+      </div>
+
+      <div *ngIf="error && !loading" class="error-state">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z" fill="currentColor"/>
+        </svg>
+        <p>{{ error }}</p>
+        <button class="btn-retry" (click)="cargarProductos()">Reintentar</button>
+      </div>
+
+      <div *ngIf="!loading && !error && productos.length === 0" class="empty-state">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM19 19H5V5H19V19Z" fill="currentColor"/>
+        </svg>
+        <h3>No hay productos registrados</h3>
+        <p>Comienza agregando tu primer producto al inventario</p>
+        <button class="btn-primary" (click)="toggleFormulario()">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="currentColor"/>
+          </svg>
+          Registrar Primer Producto
+        </button>
+      </div>
+
+      <div *ngIf="!loading && !error && productos.length > 0" class="productos-grid">
+        <div class="producto-card" *ngFor="let producto of productos">
+          <div class="producto-header">
+            <div class="producto-codigo">{{ producto.codigo }}</div>
+            <div class="producto-status" [class.low-stock]="producto.stock_actual <= producto.stock_minimo">
+              <span *ngIf="producto.stock_actual <= producto.stock_minimo">Stock Bajo</span>
+              <span *ngIf="producto.stock_actual > producto.stock_minimo">Disponible</span>
+            </div>
+          </div>
+          <div class="producto-body">
+            <h3 class="producto-nombre">{{ producto.nombre }}</h3>
+            <p class="producto-descripcion" *ngIf="producto.descripcion">{{ producto.descripcion }}</p>
+          </div>
+          <div class="producto-footer">
+            <div class="stock-info">
+              <div class="stock-item">
+                <span class="stock-label">Stock Actual:</span>
+                <span class="stock-value">{{ producto.stock_actual }}</span>
+              </div>
+              <div class="stock-item">
+                <span class="stock-label">Stock Mínimo:</span>
+                <span class="stock-value">{{ producto.stock_minimo }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
