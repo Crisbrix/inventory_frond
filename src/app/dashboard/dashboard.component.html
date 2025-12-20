@@ -1,0 +1,55 @@
+<div class="dashboard-container">
+  <div class="breadcrumbs">
+    Dashboard > Reportes
+  </div>
+
+  <div class="dashboard-header">
+    <div class="header-info">
+      <div class="header-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 9.2H3V20.8C3 21.46 3.54 22 4.2 22H15.8V20H5V9.2ZM19 3H8.2C7.54 3 7 3.54 7 4.2V14.8C7 15.46 7.54 16 8.2 16H19.8C20.46 16 21 15.46 21 14.8V4.2C21 3.54 20.46 3 19.8 3H19ZM9 13H19V5H9V13Z" fill="white"/>
+          <path d="M11 7H17V9H11V7ZM11 11H17V13H11V11Z" fill="white"/>
+        </svg>
+      </div>
+      <div class="header-text">
+        <h1 class="dashboard-title">Reportes y Estadísticas</h1>
+        <p class="dashboard-subtitle">Análisis completo del rendimiento del restaurante</p>
+      </div>
+    </div>
+    <button class="export-button">
+      <span class="export-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 9H15V3H9V9H5L12 16L19 9ZM5 18V20H19V18H5Z" fill="white"/>
+        </svg>
+      </span>
+      Exportar Todo
+    </button>
+  </div>
+
+  <div class="period-filters">
+    <button 
+      *ngFor="let period of periods"
+      class="period-button"
+      [class.active]="selectedPeriod === period.value"
+      (click)="selectPeriod(period.value)">
+      {{ period.label }}
+    </button>
+  </div>
+
+  <div class="cards-grid">
+    <app-card 
+      *ngFor="let card of cards" 
+      [cardData]="card">
+    </app-card>
+  </div>
+
+  <div class="chart-section">
+    <div class="chart-header">
+      <h2 class="chart-title">Ventas por Día</h2>
+      <p class="chart-subtitle">Últimos 7 días</p>
+    </div>
+    <div class="chart-placeholder">
+      <p>Gráfico de ventas</p>
+    </div>
+  </div>
+</div>
