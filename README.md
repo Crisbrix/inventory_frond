@@ -4,10 +4,10 @@ Dashboard moderno y minimalista para sistema de inventario construido con Angula
 
 ## Características
 
-- 🎨 Diseño minimalista con colores naranja y blanco
-- 📱 Responsive design
-- 🎯 Componentes modulares con tarjetas
-- ⚡ Angular 17 con componentes standalone
+- Diseño minimalista con colores naranja y blanco
+- Responsive design
+- Componentes modulares con tarjetas
+- Angular 17 con componentes standalone
 
 ## Requisitos
 
