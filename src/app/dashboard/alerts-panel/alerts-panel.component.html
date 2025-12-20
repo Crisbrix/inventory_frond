@@ -1,0 +1,48 @@
+<div class="alerts-panel">
+  <div class="panel-header">
+    <h2 class="panel-title">Alertas Activas</h2>
+    <span class="alerts-count">{{ alerts.length }}</span>
+  </div>
+  
+  <div class="alerts-list">
+    <div 
+      *ngFor="let alert of alerts" 
+      class="alert-item"
+      [ngClass]="getPriorityClass(alert.priority)">
+      <div class="alert-icon">
+        <ng-container [ngSwitch]="getAlertIcon(alert.type)">
+          <!-- Zero Icon -->
+          <svg *ngSwitchCase="'zero'" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z" fill="currentColor"/>
+            <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+          </svg>
+          <!-- Alert Icon -->
+          <svg *ngSwitchCase="'alert'" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 21H23L12 2L1 21ZM13 18H11V16H13V18ZM13 14H11V10H13V14Z" fill="currentColor"/>
+          </svg>
+          <!-- Clock Icon -->
+          <svg *ngSwitchCase="'clock'" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12C2 17.52 6.47 22 11.99 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 11.99 2ZM12 20C7.58 20 4 16.42 4 12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12C20 16.42 16.42 20 12 20Z" fill="currentColor"/>
+            <path d="M12.5 7H11V13L16.25 16.15L17 14.92L12.5 12.25V7Z" fill="currentColor"/>
+          </svg>
+          <!-- Edit Icon -->
+          <svg *ngSwitchCase="'edit'" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 17.25V21H6.75L17.81 9.94L14.06 6.19L3 17.25ZM20.71 7.04C21.1 6.65 21.1 6.02 20.71 5.63L18.37 3.29C17.98 2.9 17.35 2.9 16.96 3.29L15.12 5.13L18.87 8.88L20.71 7.04Z" fill="currentColor"/>
+          </svg>
+          <!-- Pause Icon -->
+          <svg *ngSwitchDefault viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 19H10V5H6V19ZM14 5V19H18V5H14Z" fill="currentColor"/>
+          </svg>
+        </ng-container>
+      </div>
+      <div class="alert-content">
+        <div class="alert-title">{{ alert.title }}</div>
+        <div class="alert-message">{{ alert.message }}</div>
+        <div class="alert-product" *ngIf="alert.product">{{ alert.product }}</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="view-all-button">Ver todas las alertas</button>
+</div>
+

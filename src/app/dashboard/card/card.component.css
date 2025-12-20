@@ -18,8 +18,8 @@
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: #FFF5F2;
-  color: var(--primary-orange);
+  background: #F5F3FF;
+  color: var(--primary-purple);
   padding: 0.4rem 0.8rem;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -42,8 +42,8 @@
 }
 
 .icon-orange {
-  background: linear-gradient(135deg, #FFE5DF 0%, #FFD4C9 100%);
-  color: var(--primary-orange);
+  background: linear-gradient(135deg, #F5F3FF 0%, #E9D5FF 100%);
+  color: var(--primary-purple);
 }
 
 .icon-green {
@@ -59,6 +59,11 @@
 .icon-purple {
   background: linear-gradient(135deg, #E7D4F8 0%, #D9C3F0 100%);
   color: #6f42c1;
+}
+
+.icon-red {
+  background: linear-gradient(135deg, #FFE5E5 0%, #FFD4D4 100%);
+  color: #dc3545;
 }
 
 .card-content {

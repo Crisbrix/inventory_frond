@@ -1,57 +1,55 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from './card/card.component';
+import { QuickActionsComponent } from './quick-actions/quick-actions.component';
+import { AlertsPanelComponent } from './alerts-panel/alerts-panel.component';
+import { ChartsSectionComponent } from './charts-section/charts-section.component';
+import { RecentMovementsComponent } from './recent-movements/recent-movements.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, CardComponent],
+  imports: [
+    CommonModule, 
+    CardComponent, 
+    QuickActionsComponent,
+    AlertsPanelComponent,
+    ChartsSectionComponent,
+    RecentMovementsComponent
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent {
-  selectedPeriod: string = 'Esta Semana';
-  
-  periods = [
-    { label: 'Hoy', value: 'Hoy' },
-    { label: 'Esta Semana', value: 'Esta Semana' },
-    { label: 'Este Mes', value: 'Este Mes' },
-    { label: 'Este Año', value: 'Este Año' }
-  ];
-
-  cards = [
+  // Cards de indicadores rápidos
+  indicatorCards = [
     {
-      title: 'Total Ventas Hoy',
-      value: '24',
-      iconType: 'cart',
-      subtitle: 'Total Ventas Hoy',
-      color: 'orange'
-    },
-    {
-      title: 'Ingresos Totales Hoy',
-      value: '$10,000',
-      iconType: 'money',
-      subtitle: 'Ingresos Totales Hoy',
-      color: 'green'
-    },
-    {
-      title: 'Ticket Promedio',
-      value: '$5,000',
-      iconType: 'chart',
-      subtitle: 'Ticket Promedio',
+      title: 'Productos Totales',
+      value: '1,234',
+      iconType: 'box',
+      subtitle: 'En inventario',
       color: 'blue'
     },
     {
-      title: 'Producto Más Vendido',
-      value: 'martillos',
-      iconType: 'box',
-      subtitle: 'Producto Más Vendido',
-      badge: '4 unidades',
-      color: 'purple'
+      title: 'Stock Bajo',
+      value: '23',
+      iconType: 'alert',
+      subtitle: 'Requieren atención',
+      color: 'orange'
+    },
+    {
+      title: 'Movimientos Hoy',
+      value: '156',
+      iconType: 'movement',
+      subtitle: 'Entradas y salidas',
+      color: 'green'
+    },
+    {
+      title: 'Alertas Activas',
+      value: '8',
+      iconType: 'warning',
+      subtitle: 'Pendientes de revisar',
+      color: 'red'
     }
   ];
-
-  selectPeriod(period: string) {
-    this.selectedPeriod = period;
-  }
 }

@@ -1,0 +1,39 @@
+<div class="recent-movements-section">
+  <div class="section-header">
+    <h2 class="section-title">Últimos Movimientos</h2>
+    <button class="view-all-link">Ver todos</button>
+  </div>
+
+  <div class="movements-table">
+    <div class="table-header">
+      <div class="col-type">Tipo</div>
+      <div class="col-product">Producto</div>
+      <div class="col-quantity">Cantidad</div>
+      <div class="col-date">Fecha</div>
+      <div class="col-user">Usuario</div>
+      <div class="col-actions">Acciones</div>
+    </div>
+
+    <div class="table-body">
+      <div *ngFor="let movement of movements" class="table-row">
+        <div class="col-type">
+          <span class="type-badge" [ngClass]="getTypeClass(movement.type)">
+            {{ getTypeLabel(movement.type) }}
+          </span>
+        </div>
+        <div class="col-product">
+          <span class="product-name">{{ movement.product }}</span>
+        </div>
+        <div class="col-quantity" [ngClass]="{'positive': movement.quantity > 0, 'negative': movement.quantity < 0}">
+          {{ movement.quantity > 0 ? '+' : '' }}{{ movement.quantity }}
+        </div>
+        <div class="col-date">{{ movement.date }}</div>
+        <div class="col-user">{{ movement.user }}</div>
+        <div class="col-actions">
+          <button class="action-link">Ver producto</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,4 +1,4 @@
-<div class="app-container">
+<div class="app-container" *ngIf="!isLoginPage && authService.isAuthenticated()">
   <aside class="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo">
@@ -11,12 +11,13 @@
         </div>
         <div class="logo-text">
           <div class="logo-title">Inventory</div>
+          <div class="logo-subtitle">Sistema POS</div>
         </div>
       </div>
     </div>
     
     <nav class="sidebar-nav">
-      <a class="nav-item active" href="#">
+      <a class="nav-item active" routerLink="/dashboard" routerLinkActive="active">
         <span class="nav-icon">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M3 13H11V3H3V13ZM3 21H11V15H3V21ZM13 21H21V11H13V21ZM13 3V9H21V3H13Z" fill="currentColor"/>
@@ -52,7 +53,7 @@
       <a class="nav-item" href="#">
         <span class="nav-icon">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="currentColor"/>
+            <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 15.67 14 12 14Z" fill="currentColor"/>
             <path d="M18 10C19.1 10 20 9.1 20 8C20 6.9 19.1 6 18 6C16.9 6 16 6.9 16 8C16 9.1 16.9 10 18 10ZM18 12C16.67 12 14 12.67 14 14V16H22V14C22 12.67 19.33 12 18 12Z" fill="currentColor"/>
           </svg>
         </span>
@@ -75,6 +76,14 @@
         </span>
         <span class="nav-text">Configuración</span>
       </a>
+      <a class="nav-item" (click)="authService.logout()" style="cursor: pointer;">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17 7L15.59 8.41L18.17 11H8V13H18.17L15.59 15.59L17 17L22 12L17 7ZM4 5H12V3H4C2.9 3 2 3.9 2 5V19C2 20.1 2.9 21 4 21H12V19H4V5Z" fill="currentColor"/>
+          </svg>
+        </span>
+        <span class="nav-text">Cerrar Sesión</span>
+      </a>
     </nav>
   </aside>
 
@@ -96,25 +105,49 @@
         </div>
       </div>
       <div class="header-right">
-        <div class="user-info">
-          <div class="user-avatar">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="white"/>
-            </svg>
+        <div class="user-info-container" (click)="toggleUserMenu()">
+          <div class="user-info">
+            <div class="user-avatar">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 15.67 14 12 14Z" fill="white"/>
+              </svg>
+            </div>
+            <div class="user-details">
+              <div class="user-name">{{ authService.getCurrentUser()?.nombre || 'Usuario' }}</div>
+              <div class="user-role">{{ authService.getCurrentUser()?.perfiles?.[0]?.nombre || 'Administrador' }}</div>
+            </div>
+            <span class="dropdown-arrow" [class.open]="isUserMenuOpen">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 10L12 15L17 10H7Z" fill="currentColor"/>
+              </svg>
+            </span>
           </div>
-          <div class="user-details">
-            <div class="user-name">Usuario</div>
-            <div class="user-role">Administrador</div>
+
+          <div class="user-menu" [class.open]="isUserMenuOpen" (click)="$event.stopPropagation()">
+            <a class="menu-item" (click)="goToProfile()">
+              <span class="menu-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 15.67 14 12 14Z" fill="currentColor"/>
+                </svg>
+              </span>
+              <span class="menu-text">Perfil</span>
+            </a>
+            <div class="menu-divider"></div>
+            <a class="menu-item logout-item" (click)="logout()">
+              <span class="menu-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17 7L15.59 8.41L18.17 11H8V13H18.17L15.59 15.59L17 17L22 12L17 7ZM4 5H12V3H4C2.9 3 2 3.9 2 5V19C2 20.1 2.9 21 4 21H12V19H4V5Z" fill="currentColor"/>
+                </svg>
+              </span>
+              <span class="menu-text">Cerrar sesión</span>
+            </a>
           </div>
-          <span class="dropdown-arrow">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7 10L12 15L17 10H7Z" fill="currentColor"/>
-            </svg>
-          </span>
         </div>
       </div>
     </header>
 
-    <app-dashboard></app-dashboard>
+    <router-outlet></router-outlet>
   </div>
 </div>
+
+<router-outlet *ngIf="isLoginPage || !authService.isAuthenticated()"></router-outlet>

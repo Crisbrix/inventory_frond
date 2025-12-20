@@ -25,7 +25,8 @@ export class CardComponent {
       'orange': 'icon-orange',
       'green': 'icon-green',
       'blue': 'icon-blue',
-      'purple': 'icon-purple'
+      'purple': 'icon-purple',
+      'red': 'icon-red'
     };
     return colorMap[this.cardData.color || 'orange'] || 'icon-orange';
   }
