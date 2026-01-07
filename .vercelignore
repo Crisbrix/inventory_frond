@@ -1,9 +1,5 @@
 node_modules
-.angular
+dist
 .git
-.gitignore
-README.md
-package-lock.json
-src
-tsconfig*.json
-angular.json
+*.log
+.DS_Store
