@@ -1,1 +1,1 @@
-{"version": 2,"builds": [{"src": "package.json","use": "@vercel/static-build","config": {"buildCommand": "npm run build:prod","outputDirectory": "dist/inventory-front"}}],"routes": [{"src": "/(.*)","dest": "/index.html"}]}
+{"version": 2, "builds": [{"src": "package.json", "use": "@vercel/static-build", "config": {"buildCommand": "npm run build", "outputDirectory": "dist/inventory-front"}}], "routes": [{"src": "/(.*)", "dest": "/index.html"}]}
