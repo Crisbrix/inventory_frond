@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-quick-actions',
@@ -9,11 +10,14 @@ import { CommonModule } from '@angular/common';
   styleUrl: './quick-actions.component.css'
 })
 export class QuickActionsComponent {
+  
+  constructor(private router: Router) {}
+
   actions = [
     {
       label: 'Nuevo Producto',
       icon: 'plus',
-      action: () => console.log('Nuevo producto')
+      action: () => this.router.navigate(['/productos'])
     },
     {
       label: 'Registrar Entrada',
@@ -30,12 +34,7 @@ export class QuickActionsComponent {
       icon: 'adjust',
       action: () => console.log('Ajuste')
     },
-    {
-      label: 'Ver Reportes',
-      icon: 'reports',
-      action: () => console.log('Reportes')
-    }
-  ];
+      ];
 
   executeAction(action: () => void) {
     action();

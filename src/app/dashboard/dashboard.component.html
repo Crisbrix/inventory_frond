@@ -30,15 +30,19 @@
   <div class="main-content-grid">
     <!-- Gráficas -->
     <div class="charts-column">
-      <app-charts-section></app-charts-section>
+      <app-charts-section 
+        [topProductos]="topProductos"
+        [entradasSalidasData]="entradasSalidasData"
+        [movimientosPorTipoData]="movimientosPorTipoData">
+      </app-charts-section>
     </div>
 
     <!-- Alertas -->
     <div class="alerts-column">
-      <app-alerts-panel></app-alerts-panel>
+      <app-alerts-panel [alertas]="alertasActivas"></app-alerts-panel>
     </div>
   </div>
 
   <!-- Listados rápidos -->
-  <app-recent-movements></app-recent-movements>
+  <app-recent-movements [movimientos]="movimientosHoy"></app-recent-movements>
 </div>

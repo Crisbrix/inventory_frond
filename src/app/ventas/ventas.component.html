@@ -1,0 +1,153 @@
+<div class="ventas-container">
+  <div class="ventas-header">
+    <h2>Procesar Venta Rápida</h2>
+    <div class="user-info">
+      <span>{{ authService.getCurrentUser()?.nombre || authService.getCurrentUser()?.username || 'Usuario' }}</span>
+    </div>
+  </div>
+
+  <div class="ventas-content">
+    <!-- Sección de productos -->
+    <div class="productos-section">
+      <div class="section-header">
+        <h3>Seleccionar Producto</h3>
+        <div class="search-box">
+          <input 
+            type="text" 
+            class="search-input" 
+            placeholder="Buscar producto..."
+            [(ngModel)]="busquedaProducto"
+          >
+        </div>
+      </div>
+
+      <div class="productos-grid">
+        <div 
+          *ngFor="let producto of filtrarProductos()" 
+          class="producto-card"
+          (click)="agregarProductoDirecto(producto)"
+        >
+          <div class="producto-info">
+            <div class="producto-nombre">{{ producto.nombre }}</div>
+            <div class="producto-codigo">{{ producto.codigo }}</div>
+            <div class="producto-stock">Stock: {{ producto.stock || producto.stock_actual || 0 }}</div>
+            <div class="producto-precio">{{ formatCurrency(producto.precio) }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección de pago y resumen -->
+    <div class="carrito-section">
+      <div class="section-header">
+        <h3>Resumen de Venta</h3>
+      </div>
+
+      <div *ngIf="carrito.length > 0" class="carrito-items">
+        <div *ngFor="let item of carrito; let i = index" class="carrito-item">
+          <div class="item-info">
+            <div class="item-nombre">{{ item.producto.nombre }}</div>
+            <div class="item-codigo">{{ item.producto.codigo }}</div>
+          </div>
+          <div class="item-controles">
+            <input 
+              type="number" 
+              class="item-cantidad" 
+              [(ngModel)]="item.cantidad"
+              min="1"
+              (change)="actualizarCantidadCarrito(i, item.cantidad)"
+            >
+            <div class="item-precio">{{ formatCurrency(item.producto.precio) }}</div>
+            <div class="item-subtotal">{{ formatCurrency(item.producto.precio * item.cantidad) }}</div>
+            <button class="btn-eliminar" (click)="eliminarDelCarrito(i)">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="carrito.length === 0" class="carrito-vacio">
+        El carrito está vacío. Agregue productos para comenzar.
+      </div>
+
+      <!-- Resumen -->
+      <div class="resumen-section">
+        <div class="resumen-fila">
+          <span>Subtotal:</span>
+          <span>{{ formatCurrency(getSubtotal()) }}</span>
+        </div>
+        <div class="resumen-fila">
+          <span>Descuento:</span>
+          <input type="number" class="descuento-input" [(ngModel)]="descuento" min="0" step="0.01">
+        </div>
+        <div class="resumen-fila total">
+          <span>Total:</span>
+          <span>{{ formatCurrency(getTotal()) }}</span>
+        </div>
+      </div>
+
+      <!-- Métodos de pago -->
+      <div class="pago-section">
+        <h4>Método de Pago</h4>
+        <div class="metodos-pago">
+          <label>
+            <input type="radio" name="metodoPago" value="EFECTIVO" [(ngModel)]="metodoPago">
+            Efectivo
+          </label>
+          <label>
+            <input type="radio" name="metodoPago" value="TARJETA" [(ngModel)]="metodoPago">
+            Tarjeta
+          </label>
+          <label>
+            <input type="radio" name="metodoPago" value="VIRTUAL" [(ngModel)]="metodoPago">
+            Virtual
+          </label>
+        </div>
+
+        <div *ngIf="metodoPago === 'EFECTIVO'" class="monto-recibido">
+          <label>Monto Recibido:</label>
+          <input 
+            type="number" 
+            class="monto-input" 
+            [(ngModel)]="montoRecibido"
+            min="0"
+            step="0.01"
+          >
+        </div>
+
+        <div *ngIf="metodoPago === 'EFECTIVO' && carrito.length > 0 && montoRecibido > 0" class="cambio">
+          <span>Cambio:</span>
+          <span class="cambio-valor">{{ formatCurrency(calcularCambio()) }}</span>
+        </div>
+      </div>
+
+      <!-- Acciones -->
+      <div class="acciones-section">
+        <button class="btn-resumen" (click)="limpiarFormulario()" [disabled]="procesandoVenta">
+          Limpiar
+        </button>
+        <button 
+          class="btn-procesar"
+          (click)="procesarVenta()"
+          [disabled]="carrito.length === 0 || procesandoVenta || (metodoPago === 'EFECTIVO' && montoRecibido < getTotal())"
+        >
+          <span *ngIf="!procesandoVenta">Procesar Venta</span>
+          <span *ngIf="procesandoVenta">Procesando...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Registro de productos -->
+  <div class="registro-productos">
+    <h4>Acciones Rápidas</h4>
+    <button class="btn-registro" (click)="abrirFormularioProducto()">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+      </svg>
+      Nuevo Producto
+    </button>
+  </div>
+</div>

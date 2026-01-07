@@ -1,44 +1,54 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Producto } from '../../services/product.service';
 
 @Component({
-  selector: 'app-registrar-producto',
+  selector: 'app-editar-producto',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
-  templateUrl: './registrar-producto.component.html',
-  styleUrl: './registrar-producto.component.css'
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './editar-producto.component.html',
+  styleUrl: './editar-producto.component.css'
 })
-export class RegistrarProductoComponent {
-  @Output() productoCreado = new EventEmitter<void>();
+export class EditarProductoComponent implements OnInit {
+  @Input() producto!: Producto;
+  @Output() productoActualizado = new EventEmitter<void>();
+  @Output() cancelarEdicion = new EventEmitter<void>();
+  
   productoForm: FormGroup;
   loading = false;
   error = '';
-  success = false;
-  productoRegistrado: any = null;
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
-    public router: Router
+    private http: HttpClient
   ) {
     this.productoForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(2)]],
-      codigo: [''], // Opcional, se genera automáticamente
       descripcion: [''],
-      precio: [0, [Validators.required]],
+      precio: ['', [Validators.required, Validators.min(0.01)]],
       stock_actual: [0, [Validators.required, Validators.min(0)]],
       stock_minimo: [0, [Validators.required, Validators.min(0)]]
     });
+  }
+
+  ngOnInit() {
+    if (this.producto) {
+      this.productoForm.patchValue({
+        nombre: this.producto.nombre,
+        descripcion: this.producto.descripcion || '',
+        precio: this.producto.precio,
+        stock_actual: this.producto.stock || this.producto.stock_actual || 0,
+        stock_minimo: this.producto.min_stock || this.producto.stock_minimo || 0
+      });
+    }
   }
 
   onSubmit() {
     if (this.productoForm.valid) {
       this.loading = true;
       this.error = '';
-      this.success = false;
 
       const token = localStorage.getItem('token');
       const headers = new HttpHeaders({
@@ -46,43 +56,24 @@ export class RegistrarProductoComponent {
         'Content-Type': 'application/json'
       });
 
-      console.log('Form values:', this.productoForm.value);
-      console.log('Precio value:', this.productoForm.value.precio);
-      console.log('Parsed precio:', parseFloat(this.productoForm.value.precio));
-
       const productoData = {
         nombre: this.productoForm.value.nombre,
         descripcion: this.productoForm.value.descripcion || null,
-        precio: Number(this.productoForm.value.precio) || 0,
+        precio: parseFloat(this.productoForm.value.precio) || 0,
         stock_actual: parseInt(this.productoForm.value.stock_actual),
         stock_minimo: parseInt(this.productoForm.value.stock_minimo)
-        // codigo no se envía, se genera automáticamente en el backend
       };
 
-      console.log('Enviando productoData:', productoData); // Debug para verificar datos
+      console.log('Actualizando productoData:', productoData); // Debug para verificar datos
 
-      this.http.post('http://localhost:3000/api/productos', productoData, { headers })
+      this.http.put(`http://localhost:3000/api/productos/${this.producto.id}`, productoData, { headers })
         .subscribe({
           next: (response: any) => {
             this.loading = false;
             if (response.success) {
-              this.success = true;
-              this.productoRegistrado = response.data;
-              this.error = ''; // Limpiar errores
-              this.productoForm.reset({
-                stock_actual: 0,
-                stock_minimo: 0,
-                precio: 0,
-                descripcion: ''
-              });
-              // Emitir evento para notificar al componente padre
-              setTimeout(() => {
-                this.success = false;
-                this.productoRegistrado = null;
-                this.productoCreado.emit();
-              }, 2000);
+              this.productoActualizado.emit();
             } else {
-              this.error = response.message || 'Error al registrar el producto';
+              this.error = response.message || 'Error al actualizar el producto';
             }
           },
           error: (err) => {
@@ -93,6 +84,10 @@ export class RegistrarProductoComponent {
     } else {
       this.error = 'Por favor completa todos los campos correctamente';
     }
+  }
+
+  cancelar() {
+    this.cancelarEdicion.emit();
   }
 
   getFieldError(fieldName: string): string {
@@ -112,4 +107,3 @@ export class RegistrarProductoComponent {
     return '';
   }
 }
-

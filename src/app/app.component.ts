@@ -13,6 +13,7 @@ import { AuthService } from './services/auth.service';
 export class AppComponent implements OnInit {
   title = 'Inventory Dashboard';
   isUserMenuOpen = false;
+  isSidebarOpen = false;
 
   constructor(
     public router: Router,
@@ -30,6 +31,18 @@ export class AppComponent implements OnInit {
       if (!event.target.closest('.user-info-container')) {
         this.isUserMenuOpen = false;
       }
+      
+      // Cerrar sidebar al hacer click fuera en móvil
+      if (window.innerWidth <= 768 && !event.target.closest('.sidebar') && !event.target.closest('.menu-toggle')) {
+        this.isSidebarOpen = false;
+      }
+    });
+
+    // Cerrar sidebar al cambiar tamaño de ventana
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) {
+        this.isSidebarOpen = false;
+      }
     });
   }
 
@@ -39,6 +52,14 @@ export class AppComponent implements OnInit {
 
   toggleUserMenu() {
     this.isUserMenuOpen = !this.isUserMenuOpen;
+  }
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
+  closeSidebar() {
+    this.isSidebarOpen = false;
   }
 
   goToProfile() {

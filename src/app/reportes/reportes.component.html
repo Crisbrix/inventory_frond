@@ -1,0 +1,273 @@
+<div class="reportes-container">
+  <div class="header">
+    <div class="header-info">
+      <div class="header-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 13H11V3H3V13ZM3 21H11V15H3V21ZM13 21H21V11H13V21ZM13 3V9H21V3H13Z" fill="white"/>
+        </svg>
+      </div>
+      <div class="header-text">
+        <h1 class="module-title">Reportes de Ventas</h1>
+        <p class="module-subtitle">Análisis de ventas por período</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla de KPIs -->
+  <div class="grafico-container">
+    <div class="card">
+      <div class="card-content">
+        <div *ngIf="cargando" class="loading">
+          <div class="loading-spinner"></div>
+          <p>Cargando indicadores...</p>
+        </div>
+        <div *ngIf="!cargando" class="kpi-grid">
+          <!-- Ventas del día -->
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-icon-ventas">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" fill="white"/>
+              </svg>
+            </div>
+            <div class="kpi-content">
+              <h3>Ventas del Día</h3>
+              <p class="kpi-value">${{ kpis.ventasDia | number: '1.0-0' }}</p>
+              <span class="kpi-subtitle">Hoy</span>
+            </div>
+          </div>
+
+          <!-- Ventas del mes -->
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-icon-mes">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z" fill="white"/>
+              </svg>
+            </div>
+            <div class="kpi-content">
+              <h3>Ventas del Mes</h3>
+              <p class="kpi-value">${{ kpis.ventasMes | number: '1.0-0' }}</p>
+              <span class="kpi-subtitle">Este mes</span>
+            </div>
+          </div>
+
+          <!-- Producto más vendido -->
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-icon-producto">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59L5.25 14H4l2 2h11l2.21-2H18.75L15.4 9.59L19 4h2V2H1zm3.27 14l1.41-2.41L8.27 16H4.27z" fill="white"/>
+              </svg>
+            </div>
+            <div class="kpi-content">
+              <h3>Producto Top</h3>
+              <p class="kpi-value">{{ kpis.productoTop.nombre || 'N/A' }}</p>
+              <span class="kpi-subtitle">{{ kpis.productoTop.cantidad }} unidades</span>
+            </div>
+          </div>
+
+          <!-- Categoría líder -->
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-icon-categoria">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2l-5.5 9h11z" fill="white"/>
+                <circle cx="12" cy="17.5" r="4.5" fill="white"/>
+              </svg>
+            </div>
+            <div class="kpi-content">
+              <h3>Método Líder</h3>
+              <p class="kpi-value">{{ kpis.categoriaLider.nombre || 'N/A' }}</p>
+              <span class="kpi-subtitle">${{ kpis.categoriaLider.total | number: '1.0-0' }}</span>
+            </div>
+          </div>
+
+          <!-- Stock crítico -->
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-icon-stock">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="white"/>
+              </svg>
+            </div>
+            <div class="kpi-content">
+              <h3>Stock Crítico</h3>
+              <p class="kpi-value">{{ kpis.stockCritico.nombre || 'Sin stock crítico' }}</p>
+              <span class="kpi-subtitle">{{ kpis.stockCritico.stock }} unidades</span>
+            </div>
+          </div>
+
+          <!-- Total Ventas -->
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-icon-total">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="white"/>
+              </svg>
+            </div>
+            <div class="kpi-content">
+              <h3>Total Ventas</h3>
+              <p class="kpi-value">${{ getResumen().total | number: '1.0-0' }}</p>
+              <span class="kpi-subtitle">Total acumulado</span>
+            </div>
+          </div>
+
+          <!-- Cantidad Prendas -->
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-icon-cantidad">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z" fill="white"/>
+              </svg>
+            </div>
+            <div class="kpi-content">
+              <h3>Cantidad Prendas</h3>
+              <p class="kpi-value">{{ getResumen().cantidad | number: '1.0-0' }}</p>
+              <span class="kpi-subtitle">Unidades totales</span>
+            </div>
+          </div>
+
+          <!-- Promedio -->
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-icon-promedio">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="white"/>
+              </svg>
+            </div>
+            <div class="kpi-content">
+              <h3>Promedio</h3>
+              <p class="kpi-value">${{ getResumen().promedio | number: '1.0-0' }}</p>
+              <span class="kpi-subtitle">Promedio por venta</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filtros-container">
+    <div class="filtro-group">
+      <label for="periodo">Período</label>
+      <select id="periodo" [(ngModel)]="periodoSeleccionado" (change)="onPeriodoChange()">
+        <option *ngFor="let periodo of periodos" [value]="periodo.value">
+          {{ periodo.label }}
+        </option>
+      </select>
+    </div>
+
+    <div class="filtro-group">
+      <label for="tipo">Tipo de Reporte</label>
+      <select id="tipo" [(ngModel)]="tipoReporteSeleccionado" (change)="onTipoReporteChange()">
+        <option *ngFor="let tipo of tiposReporte" [value]="tipo.value">
+          {{ tipo.label }}
+        </option>
+      </select>
+    </div>
+
+    <div class="filtro-group" *ngIf="periodoSeleccionado === 'anio'">
+      <label for="anio">Año</label>
+      <select id="anio" [(ngModel)]="anioSeleccionado" (change)="onPeriodoChange()">
+        <option *ngFor="let year of [2024, 2025, 2026]" [value]="year">
+          {{ year }}
+        </option>
+      </select>
+    </div>
+
+    <div class="filtro-group" *ngIf="periodoSeleccionado === 'mes'">
+      <label for="mes">Mes</label>
+      <select id="mes" [(ngModel)]="mesSeleccionado" (change)="onPeriodoChange()">
+        <option *ngFor="let month of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]" [value]="month">
+          {{ getNombreMes(month) }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Gráfico de barras -->
+  <div class="grafico-container">
+    <div class="card">
+      <div class="card-header">
+        <h2>Gráfico de barras - Ventas por Período</h2>
+      </div>
+      <div class="card-content">
+        <div *ngIf="cargando" class="loading">
+          <div class="loading-spinner"></div>
+          <p>Cargando datos...</p>
+        </div>
+        <div *ngIf="!cargando" class="chart-wrapper">
+          <canvas #chartCanvas></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gráfico de líneas -->
+  <div class="grafico-container">
+    <div class="card">
+      <div class="card-header">
+        <h2>Gráfico de líneas - Tendencia de Ventas</h2>
+      </div>
+      <div class="card-content">
+        <div *ngIf="cargando" class="loading">
+          <div class="loading-spinner"></div>
+          <p>Cargando datos...</p>
+        </div>
+        <div *ngIf="!cargando" class="chart-wrapper">
+          <canvas #tendenciaCanvas></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tarjetas en fila (3 columnas) -->
+  <div class="cards-grid">
+    <!-- Gráfico circular -->
+    <div class="grafico-container">
+      <div class="card">
+        <div class="card-header">
+          <h2>Gráfico circular - Ventas por Método de Pago</h2>
+        </div>
+        <div class="card-content">
+          <div *ngIf="cargando" class="loading">
+            <div class="loading-spinner"></div>
+            <p>Cargando datos...</p>
+          </div>
+          <div *ngIf="!cargando" class="chart-wrapper">
+            <canvas #categoriaCanvas></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráfico de barras horizontales -->
+    <div class="grafico-container">
+      <div class="card">
+        <div class="card-header">
+          <h2>Gráfico de barras horizontales - Top Productos</h2>
+        </div>
+        <div class="card-content">
+          <div *ngIf="cargando" class="loading">
+            <div class="loading-spinner"></div>
+            <p>Cargando datos...</p>
+          </div>
+          <div *ngIf="!cargando" class="chart-wrapper">
+            <canvas #topProductosCanvas></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráfico de stock -->
+    <div class="grafico-container">
+      <div class="card">
+        <div class="card-header">
+          <h2>Diagrama de Stock - Inventario Actual</h2>
+        </div>
+        <div class="card-content">
+          <div *ngIf="cargando" class="loading">
+            <div class="loading-spinner"></div>
+            <p>Cargando datos...</p>
+          </div>
+          <div *ngIf="!cargando" class="chart-wrapper">
+            <canvas #stockCanvas></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

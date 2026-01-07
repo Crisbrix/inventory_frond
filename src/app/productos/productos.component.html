@@ -61,6 +61,17 @@
       <app-registrar-producto (productoCreado)="onProductoCreado()"></app-registrar-producto>
     </div>
 
+    <!-- Formulario de edición (modal) -->
+    <div class="editar-modal-overlay" *ngIf="productoAEditar">
+      <div class="editar-modal-content">
+        <app-editar-producto 
+          [producto]="productoAEditar" 
+          (productoActualizado)="onProductoActualizado()"
+          (cancelarEdicion)="cancelarEdicion()">
+        </app-editar-producto>
+      </div>
+    </div>
+
     <!-- Lista de productos -->
     <div class="productos-list" *ngIf="!mostrarFormulario">
       <div *ngIf="loading" class="loading-state">
@@ -94,9 +105,9 @@
         <div class="producto-card" *ngFor="let producto of productos">
           <div class="producto-header">
             <div class="producto-codigo">{{ producto.codigo }}</div>
-            <div class="producto-status" [class.low-stock]="producto.stock_actual <= producto.stock_minimo">
-              <span *ngIf="producto.stock_actual <= producto.stock_minimo">Stock Bajo</span>
-              <span *ngIf="producto.stock_actual > producto.stock_minimo">Disponible</span>
+            <div class="producto-status" [class.low-stock]="producto.min_stock && producto.stock <= producto.min_stock">
+              <span *ngIf="producto.min_stock && producto.stock <= producto.min_stock">Stock Bajo</span>
+              <span *ngIf="!producto.min_stock || producto.stock > producto.min_stock">Disponible</span>
             </div>
           </div>
           <div class="producto-body">
@@ -107,12 +118,24 @@
             <div class="stock-info">
               <div class="stock-item">
                 <span class="stock-label">Stock Actual:</span>
-                <span class="stock-value">{{ producto.stock_actual }}</span>
+                <span class="stock-value">{{ producto.stock || producto.stock_actual || '0' }}</span>
               </div>
               <div class="stock-item">
                 <span class="stock-label">Stock Mínimo:</span>
-                <span class="stock-value">{{ producto.stock_minimo }}</span>
+                <span class="stock-value stock-minimo" [class.low-stock]="producto.min_stock && producto.stock <= producto.min_stock || producto.stock_minimo && producto.stock <= producto.stock_minimo">{{ producto.min_stock || producto.stock_minimo || 'No definido' }}</span>
               </div>
+            </div>
+            <div class="producto-actions">
+              <button class="btn-edit" (click)="editarProducto(producto.id!)" title="Editar producto">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="currentColor"/>
+                </svg>
+              </button>
+              <button class="btn-delete" (click)="eliminarProducto(producto.id!)" title="Eliminar producto">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" fill="currentColor"/>
+                </svg>
+              </button>
             </div>
           </div>
         </div>

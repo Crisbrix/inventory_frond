@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AlertasService, Alerta } from '../../services/alertas.service';
 
 interface Alert {
   id: number;
@@ -17,49 +18,79 @@ interface Alert {
   templateUrl: './alerts-panel.component.html',
   styleUrl: './alerts-panel.component.css'
 })
-export class AlertsPanelComponent {
-  alerts: Alert[] = [
-    {
-      id: 1,
-      type: 'stock-zero',
-      title: 'Stock en cero',
-      message: 'Producto sin stock disponible',
-      product: 'Martillos profesionales',
-      priority: 'high'
-    },
-    {
-      id: 2,
-      type: 'stock-low',
-      title: 'Stock bajo',
-      message: 'Quedan menos de 10 unidades',
-      product: 'Destornilladores set',
-      priority: 'high'
-    },
-    {
-      id: 3,
-      type: 'expiring',
-      title: 'Próximo vencimiento',
-      message: 'Vence en 7 días',
-      product: 'Pintura acrílica',
-      priority: 'medium'
-    },
-    {
-      id: 4,
-      type: 'adjustment',
-      title: 'Diferencia por ajuste',
-      message: 'Ajuste realizado hoy',
-      product: 'Clavos galvanizados',
-      priority: 'low'
-    },
-    {
-      id: 5,
-      type: 'no-movement',
-      title: 'Sin movimiento',
-      message: 'Sin movimientos en 60 días',
-      product: 'Cinta aislante',
-      priority: 'low'
+export class AlertsPanelComponent implements OnInit {
+  @Input() alertas: Alerta[] = [];
+  alerts: Alert[] = [];
+  loading = false;
+
+  constructor(private alertasService: AlertasService) {}
+
+  ngOnInit() {
+    if (this.alertas.length === 0) {
+      this.loadAlertas();
+    } else {
+      this.transformAlertas();
     }
-  ];
+  }
+
+  loadAlertas() {
+    this.loading = true;
+    this.alertasService.getAlertasActivas().subscribe({
+      next: (response: any) => {
+        if (response.success && response.data) {
+          this.alertas = response.data;
+          this.transformAlertas();
+        }
+        this.loading = false;
+      },
+      error: (error: any) => {
+        console.error('Error cargando alertas:', error);
+        this.loading = false;
+      }
+    });
+  }
+
+  transformAlertas() {
+    this.alerts = this.alertas.map(alerta => ({
+      id: alerta.id || 0,
+      type: this.getAlertTypeFromTipo(alerta.tipo),
+      title: this.getAlertTitle(alerta.tipo),
+      message: alerta.mensaje,
+      product: alerta.producto_nombre,
+      priority: this.getPriorityFromTipo(alerta.tipo)
+    }));
+  }
+
+  getAlertTypeFromTipo(tipo: string): Alert['type'] {
+    const typeMap: { [key: string]: Alert['type'] } = {
+      'STOCK_BAJO': 'stock-low',
+      'STOCK_CERO': 'stock-zero',
+      'VENCIMIENTO': 'expiring',
+      'AJUSTE': 'adjustment',
+      'SIN_MOVIMIENTO': 'no-movement'
+    };
+    return typeMap[tipo] || 'stock-low';
+  }
+
+  getAlertTitle(tipo: string): string {
+    const titleMap: { [key: string]: string } = {
+      'STOCK_BAJO': 'Stock bajo',
+      'STOCK_CERO': 'Stock en cero',
+      'VENCIMIENTO': 'Próximo vencimiento',
+      'AJUSTE': 'Ajuste realizado',
+      'SIN_MOVIMIENTO': 'Sin movimiento'
+    };
+    return titleMap[tipo] || 'Alerta';
+  }
+
+  getPriorityFromTipo(tipo: string): Alert['priority'] {
+    const highPriority = ['STOCK_CERO', 'STOCK_BAJO'];
+    const mediumPriority = ['VENCIMIENTO'];
+    
+    if (highPriority.includes(tipo)) return 'high';
+    if (mediumPriority.includes(tipo)) return 'medium';
+    return 'low';
+  }
 
   getAlertIcon(type: string): string {
     const icons: { [key: string]: string } = {
@@ -74,6 +105,11 @@ export class AlertsPanelComponent {
 
   getPriorityClass(priority: string): string {
     return `priority-${priority}`;
+  }
+
+  markAsRead(alertId: number) {
+    // TODO: Implementar marcar como leído
+    console.log('Marcar alerta como leída:', alertId);
   }
 }
 
