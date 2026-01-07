@@ -29,7 +29,7 @@ export interface ProductoResponse {
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'http://localhost:3001/api/productos';
+  private apiUrl = 'https://inventory-back-phi.vercel.app/api/productos';
 
   constructor(private http: HttpClient) {}
 

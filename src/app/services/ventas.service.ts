@@ -65,7 +65,7 @@ export interface ApiResponse<T> {
   providedIn: 'root'
 })
 export class VentasService {
-  private apiUrl = 'http://localhost:3001/api/ventas';
+  private apiUrl = 'https://inventory-back-phi.vercel.app/api/ventas';
 
   constructor(private http: HttpClient) {}
 
