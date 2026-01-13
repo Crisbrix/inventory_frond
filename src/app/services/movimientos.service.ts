@@ -34,11 +34,13 @@ export interface ApiResponse<T> {
   data?: T;
 }
 
+import { environment } from '../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class MovimientosService {
-  private apiUrl = 'https://inventory-back-five.vercel.app/api/movimientos';
+  private apiUrl = `${environment.apiUrl}/movimientos`;
 
   constructor(private http: HttpClient) {}
 

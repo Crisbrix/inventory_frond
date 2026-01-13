@@ -61,11 +61,13 @@ export interface ApiResponse<T> {
   data?: T;
 }
 
+import { environment } from '../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class VentasService {
-  private apiUrl = 'https://inventory-back-five.vercel.app/api/ventas';
+  private apiUrl = `${environment.apiUrl}/ventas`;
 
   constructor(private http: HttpClient) {}
 

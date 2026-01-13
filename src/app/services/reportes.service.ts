@@ -3,12 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiResponse } from './api.service';
 
+import { environment } from '../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ReportesService {
-  private apiUrl = 'https://inventory-back-five.vercel.app/api/ventas';
-  private productosUrl = 'https://inventory-back-five.vercel.app/api/productos';
+  private apiUrl = `${environment.apiUrl}/ventas`;
+  private productosUrl = `${environment.apiUrl}/productos`;
 
   constructor(private http: HttpClient) {}
 
