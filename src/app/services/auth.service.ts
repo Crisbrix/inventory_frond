@@ -14,7 +14,7 @@ export interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://inventory-back-phi.vercel.app/api/auth';
+  private apiUrl = 'https://inventory-back-five.vercel.app/api/auth';
   private currentUserSubject = new BehaviorSubject<any>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 

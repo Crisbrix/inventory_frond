@@ -7,8 +7,8 @@ import { ApiResponse } from './api.service';
   providedIn: 'root'
 })
 export class ReportesService {
-  private apiUrl = 'https://inventory-back-phi.vercel.app/api/ventas';
-  private productosUrl = 'https://inventory-back-phi.vercel.app/api/productos';
+  private apiUrl = 'https://inventory-back-five.vercel.app/api/ventas';
+  private productosUrl = 'https://inventory-back-five.vercel.app/api/productos';
 
   constructor(private http: HttpClient) {}
 

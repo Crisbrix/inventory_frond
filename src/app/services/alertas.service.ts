@@ -23,7 +23,7 @@ export interface ApiResponse<T> {
   providedIn: 'root'
 })
 export class AlertasService {
-  private apiUrl = 'https://inventory-back-phi.vercel.app/api/alertas';
+  private apiUrl = 'https://inventory-back-five.vercel.app/api/alertas';
 
   constructor(private http: HttpClient) {}
 

@@ -19,7 +19,7 @@ export interface ApiResponse<T> {
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = 'https://inventory-back-phi.vercel.app/api';
+  private apiUrl = 'https://inventory-back-five.vercel.app/api';
 
   constructor(private http: HttpClient) {}
 

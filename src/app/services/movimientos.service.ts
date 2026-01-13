@@ -38,7 +38,7 @@ export interface ApiResponse<T> {
   providedIn: 'root'
 })
 export class MovimientosService {
-  private apiUrl = 'https://inventory-back-phi.vercel.app/api/movimientos';
+  private apiUrl = 'https://inventory-back-five.vercel.app/api/movimientos';
 
   constructor(private http: HttpClient) {}
 
