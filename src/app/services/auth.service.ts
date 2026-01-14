@@ -37,7 +37,8 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { email, password }).pipe(
+    // Temporal: usar GET mientras solucionamos POST en Vercel
+    return this.http.get<LoginResponse>(`${this.apiUrl}/login?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`).pipe(
       tap(response => {
         if (response.success && response.token && response.user) {
           localStorage.setItem('token', response.token);
