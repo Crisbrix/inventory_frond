@@ -147,7 +147,7 @@ export class ReportesComponent implements OnInit, AfterViewInit {
           console.log(' Top productos response:', response);
           if (response.success) {
             this.datosTopProductos = response.data || [];
-            console.log('📈 datosTopProductos:', this.datosTopProductos);
+            console.log('datosTopProductos:', this.datosTopProductos);
             setTimeout(() => {
               this.inicializarGraficoTopProductos();
             }, 100);
@@ -170,16 +170,16 @@ export class ReportesComponent implements OnInit, AfterViewInit {
               this.inicializarGraficoStock();
             }, 100);
           } else {
-            console.log('❌ Stock response sin success:', response);
+            console.log('Stock response sin success:', response);
           }
         },
         error: (error: any) => {
-          console.error('🚨 Error cargando datos de stock:', error);
-          console.error('🚨 Status:', error.status);
-          console.error('🚨 Message:', error.message);
+          console.error('Error cargando datos de stock:', error);
+          console.error('Status:', error.status);
+          console.error('Message:', error.message);
         },
         complete: () => {
-          console.log('✅ Stock request completed');
+          console.log('Stock request completed');
           this.calcularKPIs();
           this.cargando = false;
         }
@@ -191,7 +191,7 @@ export class ReportesComponent implements OnInit, AfterViewInit {
   }
 
   calcularKPIs(): void {
-    console.log(' Calculando KPIs...');
+    console.log('Calculando KPIs...');
 
     // 1. Ventas del día
     const hoy = new Date().toISOString().split('T')[0];
@@ -242,7 +242,7 @@ export class ReportesComponent implements OnInit, AfterViewInit {
       }
     }
 
-    console.log('📊 KPIs calculados:', this.kpis);
+    console.log('KPIs calculados:', this.kpis);
   }
 
   inicializarGraficoStock(): void {
@@ -330,7 +330,7 @@ export class ReportesComponent implements OnInit, AfterViewInit {
   }
 
   procesarDatosStock(): any {
-    console.log('🔍 procesarDatosStock - datosStock:', this.datosStock);
+    console.log('procesarDatosStock - datosStock:', this.datosStock);
 
     if (!this.datosStock || this.datosStock.length === 0) {
       return {
@@ -589,7 +589,7 @@ export class ReportesComponent implements OnInit, AfterViewInit {
           },
           title: {
             display: true,
-            text: '💰 Ventas por Método de Pago',
+            text: 'Ventas por Método de Pago',
             color: '#212529',
             font: {
               size: 20,
