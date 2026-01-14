@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-registrar-producto',
@@ -61,7 +62,7 @@ export class RegistrarProductoComponent {
 
       console.log('Enviando productoData:', productoData); // Debug para verificar datos
 
-      this.http.post('http://localhost:3000/api/productos', productoData, { headers })
+      this.http.post(`${environment.apiUrl}/productos`, productoData, { headers })
         .subscribe({
           next: (response: any) => {
             this.loading = false;

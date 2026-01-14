@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Producto } from '../../services/product.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-editar-producto',
@@ -66,7 +67,7 @@ export class EditarProductoComponent implements OnInit {
 
       console.log('Actualizando productoData:', productoData); // Debug para verificar datos
 
-      this.http.put(`http://localhost:3000/api/productos/${this.producto.id}`, productoData, { headers })
+      this.http.put(`${environment.apiUrl}/productos/${this.producto.id}`, productoData, { headers })
         .subscribe({
           next: (response: any) => {
             this.loading = false;

@@ -159,7 +159,7 @@ export class DashboardComponent implements OnInit {
   updateIndicatorCards() {
     const totalProductos = this.productos.length;
     const stockBajo = this.productos.filter(p => 
-      p.min_stock && p.stock <= p.min_stock
+      p.stock_minimo && p.stock_actual <= p.stock_minimo
     ).length;
 
     this.indicatorCards[0].value = totalProductos.toString();

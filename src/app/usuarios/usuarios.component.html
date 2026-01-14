@@ -1,0 +1,123 @@
+<div class="usuarios-container">
+  <div class="usuarios-header">
+    <h2>Gestión de Usuarios</h2>
+    <button class="btn btn-primary" (click)="toggleFormulario()">
+      <span *ngIf="!mostrarFormulario">➕ Nuevo Usuario</span>
+      <span *ngIf="mostrarFormulario">❌ Cancelar</span>
+    </button>
+  </div>
+
+  <!-- Alertas -->
+  <div class="alert alert-success" *ngIf="success">
+    {{ success }}
+  </div>
+  <div class="alert alert-error" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <!-- Formulario -->
+  <div class="form-container" *ngIf="mostrarFormulario">
+    <div class="form-card">
+      <h3>{{ editando ? 'Editar Usuario' : 'Nuevo Usuario' }}</h3>
+      <form [formGroup]="usuarioForm" (ngSubmit)="guardarUsuario()">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre Completo</label>
+            <input type="text" formControlName="nombre" class="form-control" />
+            <span class="error-text" *ngIf="usuarioForm.get('nombre')?.invalid && usuarioForm.get('nombre')?.touched">
+              {{ getFieldError('nombre') }}
+            </span>
+          </div>
+          <div class="form-group">
+            <label>Correo Electrónico</label>
+            <input type="email" formControlName="correo" class="form-control" />
+            <span class="error-text" *ngIf="usuarioForm.get('correo')?.invalid && usuarioForm.get('correo')?.touched">
+              {{ getFieldError('correo') }}
+            </span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Rol</label>
+            <select formControlName="rol" class="form-control">
+              <option value="VENDEDOR">Vendedor</option>
+              <option value="ADMIN">Administrador</option>
+              <option value="CAJERO">Cajero</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" *ngIf="!editando">
+          <label>Contraseña</label>
+          <input type="password" formControlName="password" class="form-control" />
+          <span class="error-text" *ngIf="usuarioForm.get('password')?.invalid && usuarioForm.get('password')?.touched">
+            {{ getFieldError('password') }}
+          </span>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-success" [disabled]="loading || usuarioForm.invalid">
+            {{ loading ? '⏳ Guardando...' : '💾 Guardar' }}
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="resetFormulario()">
+            🔄 Limpiar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Lista de Usuarios -->
+  <div class="usuarios-list">
+    <div class="loading" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Cargando usuarios...</p>
+    </div>
+
+    <div class="usuarios-grid" *ngIf="!loading && usuarios.length > 0">
+      <div class="usuario-card" *ngFor="let usuario of usuarios">
+        <div class="usuario-header">
+          <div class="usuario-avatar">
+            {{ usuario.nombre.charAt(0).toUpperCase() }}
+          </div>
+          <div class="usuario-info">
+            <h4>{{ usuario.nombre }}</h4>
+            <p>{{ usuario.correo }}</p>
+          </div>
+          <div class="usuario-perfil">
+            <span class="badge" [class.badge-admin]="usuario.rol === 'ADMIN'" [class.badge-vendedor]="usuario.rol === 'VENDEDOR'" [class.badge-cajero]="usuario.rol === 'CAJERO'">
+              {{ usuario.rol }}
+            </span>
+          </div>
+        </div>
+        
+        <div class="usuario-details">
+          <div class="detail-item">
+            <span class="detail-label">📧 Email:</span>
+            <span class="detail-value">{{ usuario.correo }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">📅 Creación:</span>
+            <span class="detail-value">{{ usuario.fecha_creacion | date:'shortDate' }}</span>
+          </div>
+        </div>
+
+        <div class="usuario-actions">
+          <button class="btn btn-sm btn-warning" (click)="editarUsuario(usuario)">
+            ✏️ Editar
+          </button>
+          <button class="btn btn-sm btn-danger" (click)="eliminarUsuario(usuario)">
+            🗑️ Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="!loading && usuarios.length === 0">
+      <div class="empty-icon">👥</div>
+      <h3>No hay usuarios registrados</h3>
+      <p>Comienza creando tu primer usuario</p>
+    </div>
+  </div>
+</div>

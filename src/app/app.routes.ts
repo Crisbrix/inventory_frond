@@ -30,6 +30,16 @@ export const routes: Routes = [
     loadComponent: () => import('./reportes/reportes.component').then(m => m.ReportesComponent),
     canActivate: [AuthGuard]
   },
+  {
+    path: 'usuarios',
+    loadComponent: () => import('./usuarios/usuarios.component').then(m => m.UsuariosComponent),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'configuracion',
+    loadComponent: () => import('./configuracion/configuracion.component').then(m => m.ConfiguracionComponent),
+    canActivate: [AuthGuard]
+  },
     {
     path: '',
     redirectTo: '/login',
